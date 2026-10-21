@@ -15,11 +15,21 @@ const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 // Request body parser with size limits
 app.use(express.json({ limit: '1mb' }));
 
+// Security Headers Middleware
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  next();
+});
+
 // Health check endpoint
 app.get('/api/health', (req: Request, res: Response) => {
   res.json({
     status: 'ok',
     app: 'EventEase AI',
+    version: '1.0.0',
     timestamp: new Date().toISOString(),
     aiConfigured: Boolean(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'MY_GEMINI_API_KEY')
   });

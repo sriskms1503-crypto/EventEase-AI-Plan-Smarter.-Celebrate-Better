@@ -314,7 +314,7 @@ export const App: React.FC = () => {
       />
 
       {/* Main View Router */}
-      <main className="flex-1">
+      <main id="main-content" className="flex-1 focus:outline-none" tabIndex={-1}>
         {currentView === 'landing' && (
           <LandingPage
             onStartPlanning={handleStartPlanning}

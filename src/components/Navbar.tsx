@@ -66,10 +66,11 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex items-center gap-3 shrink-0">
           <button
             onClick={() => setResetModalOpen(true)}
-            className="flex items-center gap-1 text-[11px] bg-white/15 hover:bg-white/25 transition px-2.5 py-0.5 rounded-md text-white font-medium cursor-pointer"
+            className="flex items-center gap-1 text-[11px] bg-white/15 hover:bg-white/25 transition px-2.5 py-0.5 rounded-md text-white font-medium cursor-pointer focus:outline-none focus:ring-1 focus:ring-white"
             title="Reset to initial demo data"
+            aria-label="Reset demo to initial data"
           >
-            <RotateCcw className="w-3 h-3" />
+            <RotateCcw className="w-3 h-3" aria-hidden="true" />
             <span>Reset Demo</span>
           </button>
         </div>
@@ -81,10 +82,11 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex items-center gap-6">
             <button
               onClick={() => setCurrentView('landing')}
-              className="flex items-center gap-2.5 text-left group transition focus:outline-hidden"
+              className="flex items-center gap-2.5 text-left group transition focus:outline-none focus:ring-2 focus:ring-[#5B5CF0] rounded-xl p-1"
+              aria-label="EventEase AI Home"
             >
               <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#5B5CF0] to-[#FF7799] flex items-center justify-center shadow-md shadow-indigo-500/20 group-hover:scale-105 transition">
-                <Sparkles className="w-5 h-5 text-white" />
+                <Sparkles className="w-5 h-5 text-white" aria-hidden="true" />
               </div>
               <div>
                 <span className="text-xl font-extrabold tracking-tight text-[#14213D] block font-heading">
@@ -101,15 +103,20 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div className="relative hidden md:block">
                 <button
                   onClick={() => setEventDropdownOpen(!eventDropdownOpen)}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-xs font-semibold text-slate-800 transition max-w-[240px]"
+                  aria-haspopup="listbox"
+                  aria-expanded={eventDropdownOpen}
+                  aria-label="Select active event"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-xs font-semibold text-slate-800 transition max-w-[240px] focus:outline-none focus:ring-2 focus:ring-[#5B5CF0]"
                 >
-                  <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" aria-hidden="true"></span>
                   <span className="truncate text-left">{activeEvent?.title || 'Select Event'}</span>
-                  <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0" aria-hidden="true" />
                 </button>
 
                 {eventDropdownOpen && (
                   <div
+                    role="listbox"
+                    aria-label="Available events"
                     className="absolute left-0 mt-2 w-72 bg-white rounded-xl shadow-xl border border-slate-100 py-1.5 z-50 text-xs"
                     onMouseLeave={() => setEventDropdownOpen(false)}
                   >
@@ -119,15 +126,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                     {events.map((e) => (
                       <button
                         key={e.id}
+                        role="option"
+                        aria-selected={e.id === activeEvent?.id}
                         onClick={() => {
                           onSelectEvent(e.id);
                           setEventDropdownOpen(false);
                         }}
-                        className={`w-full px-3 py-2 text-left flex items-start gap-2 hover:bg-slate-50 transition ${
+                        className={`w-full px-3 py-2 text-left flex items-start gap-2 hover:bg-slate-50 transition cursor-pointer focus:outline-none focus:bg-indigo-50 ${
                           e.id === activeEvent?.id ? 'bg-indigo-50/70 text-[#5B5CF0] font-semibold' : 'text-slate-700'
                         }`}
                       >
-                        <span className="mt-1 w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0"></span>
+                        <span className="mt-1 w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0" aria-hidden="true"></span>
                         <div className="overflow-hidden">
                           <p className="truncate font-medium">{e.title}</p>
                           <p className="text-[10px] text-slate-400">{e.eventType} • {e.date}</p>
@@ -140,9 +149,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                         setEventDropdownOpen(false);
                         onOpenNewEventWizard();
                       }}
-                      className="w-full px-3 py-2 text-left flex items-center gap-2 text-[#5B5CF0] font-semibold hover:bg-indigo-50 transition"
+                      className="w-full px-3 py-2 text-left flex items-center gap-2 text-[#5B5CF0] font-semibold hover:bg-indigo-50 transition cursor-pointer focus:outline-none focus:bg-indigo-50"
                     >
-                      <PlusCircle className="w-4 h-4" />
+                      <PlusCircle className="w-4 h-4" aria-hidden="true" />
                       <span>Create New Event</span>
                     </button>
                   </div>
@@ -152,7 +161,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1" aria-label="Main Navigation">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = currentView === item.id;
@@ -160,13 +169,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   key={item.id}
                   onClick={() => setCurrentView(item.id)}
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold transition cursor-pointer relative ${
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold transition cursor-pointer relative focus:outline-none focus:ring-2 focus:ring-[#5B5CF0] ${
                     isActive
                       ? 'text-[#5B5CF0] bg-indigo-50/80 shadow-2xs'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-[#5B5CF0]' : 'text-slate-500'}`} />
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-[#5B5CF0]' : 'text-slate-500'}`} aria-hidden="true" />
                   <span>{item.label}</span>
                   {item.badge && (
                     <span className="ml-0.5 text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded-full bg-linear-to-r from-[#5B5CF0] to-[#FF7799] text-white">

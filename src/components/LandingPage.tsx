@@ -327,8 +327,17 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             {categories.map((cat, idx) => (
               <div
                 key={idx}
+                role="button"
+                tabIndex={0}
+                aria-label={`Plan ${cat.title}`}
                 onClick={() => onStartPlanning(cat.type)}
-                className="group relative rounded-2xl bg-[#FFFDF9] border border-slate-200/80 hover:border-indigo-300 p-5 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer overflow-hidden transform hover:-translate-y-1"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onStartPlanning(cat.type);
+                  }
+                }}
+                className="group relative rounded-2xl bg-[#FFFDF9] border border-slate-200/80 hover:border-indigo-300 p-5 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer overflow-hidden transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-[#5B5CF0]"
               >
                 <div className="relative h-40 rounded-xl overflow-hidden mb-4 bg-slate-100">
                   <img
@@ -336,7 +345,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                     alt={cat.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                   />
-                  <div className="absolute top-2.5 left-2.5 bg-white/90 backdrop-blur-xs text-base w-8 h-8 rounded-lg flex items-center justify-center shadow-xs">
+                  <div className="absolute top-2.5 left-2.5 bg-white/90 backdrop-blur-xs text-base w-8 h-8 rounded-lg flex items-center justify-center shadow-xs" aria-hidden="true">
                     {cat.icon}
                   </div>
                 </div>
@@ -352,7 +361,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
                 <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[#5B5CF0]">
                   <span>Plan {cat.type}</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" aria-hidden="true" />
                 </div>
               </div>
             ))}
